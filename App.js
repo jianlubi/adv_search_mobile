@@ -2,36 +2,82 @@ import React from 'react';
 import {data} from './assets/src/components/data';
 import { StyleSheet, Text, View, AsyncStorage, Image } from 'react-native';
 import SchoolList from './assets/src/components/SchoolList';
-import { createStackNavigator, createAppContainer } from "react-navigation";
-import schoolDetails from './assets/src/components/SchoolDetails';
+import { createStackNavigator, createAppContainer, createMaterialTopTabNavigator } from "react-navigation";
+import SchoolDetails from './assets/src/components/SchoolDetails';
 import Footer from './assets/src/components/Footer';
 import schoolMap from './assets/src/components/schoolMap';
 import {FilterContext} from './assets/src/components/FilterContext';
+import Filter from './assets/src/components/Filter';
+import Tuition from './assets/src/components/schooldetails/Tuition';
+
 export default class App extends React.Component{
   constructor(){
     super();
     this.state = {
-      shortlist: new Set(), 
+      shortlist: [],
+      filters:{
+        grades:[],
+        types:[],
+        genders:[],
+      } 
     }
   }
-  _retrieveData = async () => {
+  
+  retrieveShortlist = async () => {
     try {
       const shortlist = await AsyncStorage.getItem('shortlist');
+      const shortlistArr = shortlist.split(",");
+      console.log(shortlist);
       if (shortlist !== null) {
        this.setState({
-         shortlist: shortlist
+         shortlist: shortlistArr
        });
       }
+      
      } catch (error) {
-       // Error retrieving data
+       // Error retrieving shortlist
      }
+  }
+  storeData = async (shortlist) => {
+    try {
+      await AsyncStorage.setItem('shortlist', shortlist,()=>{
+        this.retrieveShortlist();
+      });
+      console.log("saving...");
+    } catch (error) {
+      // Error saving data
+    }
   }
   addToShortlist = (schoolID, schoolName) => {
     const shortlist  = this.state.shortlist;
-    (shortlist.has(schoolID))?shortlist.delete(schoolID):shortlist.add(schoolID);
+    if(shortlist.includes(schoolID)){
+      shortlist = shortlist.filter(item => item !== schoolID)
+    }else{
+      shortlist.push(schoolID);
+    }
+    const shortlistStr = shortlist.join(",");
+    this.storeData(shortlistStr);
+    console.log(shortlist)
     this.setState({
       shortlist:shortlist
     })
+  }
+  handleFilters = (filterName, checkboxValue) =>{
+      let filterArr =  this.state.filters;
+      if(filterArr[filterName].includes(checkboxValue)){
+        filterArr[filterName] = filterArr[filterName].filter(item => item !== checkboxValue)
+      }else{
+        filterArr[filterName].push(checkboxValue);
+      }
+      this.setState({
+        filters: filterArr
+      })
+  }
+  updateSchoolList = () =>{
+    
+  }
+  componentDidMount(){
+    this.retrieveShortlist();
   }
   render(){
     return (
@@ -39,8 +85,10 @@ export default class App extends React.Component{
       {
         schoolData:data, 
         shortlist:this.state.shortlist,
+        filters:this.state.filters,
         actions:{
-          addToShortlist:this.addToShortlist
+          addToShortlist:this.addToShortlist,
+          handleFilters:this.handleFilters
         }
       }}>
         <AppContainer />
@@ -104,14 +152,49 @@ const styles = StyleSheet.create({
   },
 });
 
+const ProfileNavigator = createMaterialTopTabNavigator(
+  {
+    ProfileHome: SchoolDetails,
+    ProfileTuition: Tuition
+  },
+  {
+     defaultNavigationOptions: {
+     title: 'Home',
+         headerTintColor: '#fff',
+         headerStyle: {
+           backgroundColor: '#000',
+         },
+       },
+    tabBarPosition: 'bottom',
+    tabBarOptions:{
+      activeTintColor:'white',
+      inactiveTintColor:'white',
+      style:{
+        backgroundColor:'#b20000',
+      },
+      indicatorStyle:{
+        height: 0
+      }
+    },
+
+    initialRouteName: "ProfileHome"
+  }
+)
+ProfileNavigator.navigationOptions = ({ navigation }) => {
+  return {
+    title: navigation.getParam('schoolName', "school"),
+  }
+}
 const AppNavigator = createStackNavigator(
  {
     Home: HomeScreen,
-    Details:schoolDetails,
-    Map: schoolMap
+    Details:ProfileNavigator,
+    Map: schoolMap,
+    Filter: Filter
   },
   {
     initialRouteName: "Home"
   }
 );
+
 const AppContainer = createAppContainer(AppNavigator);

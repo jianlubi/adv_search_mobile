@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const styles = StyleSheet.create({
@@ -31,8 +31,9 @@ export default class School extends React.Component{
     render(){
         const schoolID = this.props.schoolID;
         const schoolName = this.props.schoolName;
+
         return(
-                <TouchableWithoutFeedback  onPress={() => {
+                <TouchableOpacity  onPress={() => {
                     this.props.navigation.navigate('Details',{
                         schoolID: schoolID,
                         schoolName: schoolName
@@ -41,9 +42,9 @@ export default class School extends React.Component{
                     <View style={styles.tableContentSchool}>
                     <View style={{flex:1}}><Text><Text style={{fontSize: 18}}>{this.props.distance}</Text>{"\n"} <Text style={{fontSize: 12}}>km</Text></Text></View>
                     <View style={{flex:5}}><Text ><Text style={styles.schoolName}>{this.props.schoolName}{"\n"}</Text><Text>{`${this.props.grade_from} to ${this.props.grade_to} (${this.props.genders})`}</Text></Text></View>
-                    <View style={{flex:1}}><Text><Icon name={this.props.shortlist.has(schoolID)?"heart":"heart-o"} size={20} color="red" onPress={()=>this.props.addToShortlist(schoolID, schoolName)}></Icon></Text></View>
+                    <TouchableOpacity style={{flex:1,padding:10}} onPress={()=>{this.props.addToShortlist(schoolID, schoolName)}}><Text><Icon name={this.props.shortlist.includes(schoolID)?"heart":"heart-o"} size={20} color="red" ></Icon></Text></TouchableOpacity>
                     </View>
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
         );
     }
 }

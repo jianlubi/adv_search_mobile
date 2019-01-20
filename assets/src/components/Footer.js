@@ -52,7 +52,9 @@ export default class Footer extends React.Component{
                             </Text>
                     </View>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={()=>{
+                    this.props.navigation.navigate('Filter')
+                }}>
                     <View style={styles.right}>
                         <Text style={{fontSize:18}}>
                         <Icon name="filter" style={{fontSize:18}}/> Filter
