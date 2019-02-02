@@ -35,7 +35,7 @@ export default class schoolDetails extends React.Component {
     }
     componentDidMount() {
         const sid = "id=" + this.props.sid;
-        fetch(`http://ourkids.dyndns.org:8080/school/json_adv_search_mini_profile.php`, {
+        fetch(`https://ourkids.net/school/adv-search/json_adv_search_mini_profile.php`, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'

@@ -10,32 +10,31 @@ const styles = StyleSheet.create({
     }
 
 });
-export default class Grades extends Component {
-
-
+export default class DevelopmentalPriorities extends Component {
     render() {
         return (
             <FilterContext.Consumer>
                 {context => (
                     <View>
-                        <Text>Grades</Text>
+                        <Text>Developmental priorities</Text>
                         <View style={styles.twocols}>
                             <View style={styles.col}>
-                                {this.props.filterData.map((filter) => {
+                                {this.props.filterData && this.props.filterData.map((filter) => {
                                     return (
                                         <View key={filter.id} style={{ flexDirection: 'row' }}>
                                             <CheckBox
-                                                value={context.filters.grades.includes(filter.code)}
-                                                onValueChange={() => { context.actions.handleFilters('grades', filter.code) }}
-                                            /><Text style={{ marginTop: 5 }}>{filter.value}</Text>
-                                        </View>);
+                                                value={context.filters.development.includes(filter.code)}
+                                                onValueChange={() => { context.actions.handleFilters('development', filter.code) }}
+                                            />
+                                            <Text style={{ marginTop: 5 }}>{filter.item}</Text>
+                                        </View>
+                                    );
                                 })}
 
                             </View>
                         </View>
                     </View>
-                )
-                }
+                )}
             </FilterContext.Consumer>
         )
     }

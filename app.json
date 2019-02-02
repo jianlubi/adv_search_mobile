@@ -3,7 +3,7 @@
     "name": "adv_search_mobile",
     "slug": "adv_search_mobile",
     "privacy": "public",
-    "sdkVersion": "31.0.0",
+    "sdkVersion": "32.0.0",
     "platforms": [
       "ios",
       "android"

@@ -10,32 +10,30 @@ const styles = StyleSheet.create({
     }
 
 });
-export default class Grades extends Component {
 
-
+export default class CoreFocuses extends Component {
     render() {
         return (
             <FilterContext.Consumer>
                 {context => (
                     <View>
-                        <Text>Grades</Text>
+                        <Text>Core school focus</Text>
                         <View style={styles.twocols}>
                             <View style={styles.col}>
-                                {this.props.filterData.map((filter) => {
+                                {this.props.filterData && this.props.filterData.map((filter) => {
                                     return (
                                         <View key={filter.id} style={{ flexDirection: 'row' }}>
                                             <CheckBox
-                                                value={context.filters.grades.includes(filter.code)}
-                                                onValueChange={() => { context.actions.handleFilters('grades', filter.code) }}
-                                            /><Text style={{ marginTop: 5 }}>{filter.value}</Text>
+                                                value={context.filters.schoolFocus.includes(filter.code)}
+                                                onValueChange={() => { context.actions.handleFilters('schoolFocus', filter.code) }}
+                                            /><Text style={{ marginTop: 5 }}>{filter.item}</Text>
                                         </View>);
                                 })}
 
                             </View>
                         </View>
                     </View>
-                )
-                }
+                )}
             </FilterContext.Consumer>
         )
     }
