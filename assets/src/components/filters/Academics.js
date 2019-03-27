@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, CheckBox } from 'react-native'
-
+import { StyleSheet, Text, View, CheckBox, TouchableHighlight } from 'react-native'
+import { Svg } from 'expo';
 import { FilterContext } from '../FilterContext';
 const styles = StyleSheet.create({
     twocols: {
@@ -8,6 +8,10 @@ const styles = StyleSheet.create({
     },
     col: {
         flex: 1
+    },
+    accordionHeading:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     }
 
 });
@@ -20,9 +24,15 @@ export default class Academics extends Component {
                 {context => (
                     <>
                         <TouchableHighlight>
-                            <View>
+                            <View style={styles.accordionHeading}>
                                 <Text>Academics</Text>
-                                
+                                <Svg height={30} width={30}>
+                                <Svg.Path
+        d="m4.29 1.71a1 1 0 1 1 1.42-1.41l8 8a1 1 0 0 1 0 1.41l-8 8a1 1 0 1 1 -1.42-1.41l7.29-7.29z"
+        fill="#4a90e2"
+        stroke="#4a90e2"
+    /> 
+                                </Svg>
                             </View>
                         </TouchableHighlight>
                         <View>
