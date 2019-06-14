@@ -1,7 +1,8 @@
 import React from 'react';
 import { data } from './assets/src/components/data';
 import { StyleSheet, Text, View, AsyncStorage, Image, Platform } from 'react-native';
-import { Constants, Location, Permissions } from 'expo';
+import Constants from 'expo-constants'
+import { Location, Permissions } from 'expo';
 import SchoolList from './assets/src/components/SchoolList';
 import { createStackNavigator, createAppContainer, createMaterialTopTabNavigator } from "react-navigation";
 import SchoolDetails from './assets/src/components/SchoolDetails';
@@ -86,6 +87,7 @@ export default class App extends React.Component {
     getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
+            console.log('Permission to access location was denied')
           this.setState({
             errorMessage: 'Permission to access location was denied',
           });

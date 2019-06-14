@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome } from '@expo/vector-icons';
 import { FilterContext } from './FilterContext'
 const styles = StyleSheet.create({
     tableContentSchool: {
@@ -44,7 +44,7 @@ export default class School extends React.Component {
                         <View style={styles.tableContentSchool}>
                             <View style={{ flex: 1 }}><Text><Text style={{ fontSize: 18 }}>{this.props.distance}</Text>{"\n"} <Text style={{ fontSize: 12 }}>km</Text></Text></View>
                             <View style={{ flex: 5 }}><Text ><Text style={styles.schoolName}>{this.props.schoolName}{"\n"}</Text><Text>{`${this.props.grade_from} to ${this.props.grade_to} (${this.props.genders})`}</Text></Text></View>
-                            <TouchableOpacity style={{ flex: 1, padding: 10 }} onPress={() => { this.props.addToShortlist(schoolID, schoolName) }}><Text><Icon name={context.shortlist.includes(schoolID) ? "heart" : "heart-o"} size={20} color="red" ></Icon></Text></TouchableOpacity>
+                            <TouchableOpacity style={{ flex: 1, padding: 10 }} onPress={() => { this.props.addToShortlist(schoolID, schoolName) }}><Text><FontAwesome name={context.shortlist.includes(schoolID) ? "heart" : "heart-o"} size={20} color="red" ></FontAwesome></Text></TouchableOpacity>
                         </View>
                     </TouchableOpacity>
                 )

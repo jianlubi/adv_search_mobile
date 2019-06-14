@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, CheckBox, TouchableHighlight } from 'react-native'
-import { Svg } from 'expo';
+
+import Svg, {Path} from 'react-native-svg';
 import { FilterContext } from '../FilterContext';
 const styles = StyleSheet.create({
     twocols: {
@@ -27,7 +28,7 @@ export default class Academics extends Component {
                             <View style={styles.accordionHeading}>
                                 <Text>Academics</Text>
                                 <Svg height={30} width={30}>
-                                <Svg.Path
+                                <Path
         d="m4.29 1.71a1 1 0 1 1 1.42-1.41l8 8a1 1 0 0 1 0 1.41l-8 8a1 1 0 1 1 -1.42-1.41l7.29-7.29z"
         fill="#4a90e2"
         stroke="#4a90e2"

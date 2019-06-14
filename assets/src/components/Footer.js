@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+//import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 const styles = StyleSheet.create({
     footer:{
         position:'absolute',
@@ -48,7 +49,7 @@ export default class Footer extends React.Component{
                     }}>
                     <View style={styles.left} >
                         <Text style={{fontSize:16}}>
-                            <Icon name="map" style={{fontSize:18}} />  Map
+                        <FontAwesome name="map" style={{fontSize:18}} />  Map
                             </Text>
                     </View>
                 </TouchableWithoutFeedback>
@@ -57,7 +58,7 @@ export default class Footer extends React.Component{
                 }}>
                     <View style={styles.right}>
                         <Text style={{fontSize:18}}>
-                        <Icon name="filter" style={{fontSize:18}}/> Filter
+                        <FontAwesome name="filter" style={{fontSize:18}}/> Filter
                     </Text>
                 </View>
                 </TouchableWithoutFeedback>
