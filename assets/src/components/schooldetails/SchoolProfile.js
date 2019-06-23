@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, AsyncStorage, Image, Dimensions } from 'react-native';
+import { createMaterialTopTabNavigator } from 'react-navigation';
 const styles = StyleSheet.create({
     detailsSection: {
         flexDirection: 'row',
@@ -12,6 +13,10 @@ const styles = StyleSheet.create({
     },
     right: {
         flex: 0.6,
+
+    },
+    details: {
+
 
     },
     miniContent: {

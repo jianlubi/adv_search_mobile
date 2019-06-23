@@ -5,7 +5,7 @@ export default class Tuition extends Component {
   render() {
     return (
       <View>
-        <Text> TODO </Text>
+        <Text> textInComponent </Text>
       </View>
     )
   }

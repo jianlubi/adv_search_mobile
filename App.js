@@ -1,7 +1,7 @@
 import React from 'react';
 import { data } from './assets/src/components/data';
-import { StyleSheet, Text, View, AsyncStorage, Image, Platform } from 'react-native';
-import Constants from 'expo-constants'
+import { StyleSheet, Text, View, AsyncStorage, Image, Platform, Dimensions, Animated } from 'react-native';
+import Constants from 'expo-constants'; 
 import { Location, Permissions } from 'expo';
 import SchoolList from './assets/src/components/SchoolList';
 import { createStackNavigator, createAppContainer, createMaterialTopTabNavigator } from "react-navigation";
@@ -11,6 +11,7 @@ import schoolMap from './assets/src/components/schoolMap';
 import { FilterContext } from './assets/src/components/FilterContext';
 import Filter from './assets/src/components/Filter';
 import Tuition from './assets/src/components/schooldetails/Tuition';
+import SlidingUpPanel from 'rn-sliding-up-panel';
 
 export default class App extends React.Component {
     constructor() {
@@ -18,8 +19,8 @@ export default class App extends React.Component {
         this.state = {
             shortlist: [],
             schoolData: [],
-            lat:'',
-            lng:'',
+            lat: '',
+            lng: '',
             filters: {
                 grades: [],
                 types: [],
@@ -59,6 +60,7 @@ export default class App extends React.Component {
                 tuitionRange: [0, 100],
                 acceptanceRange: [0, 100],
             },
+            isFilterActive: false,
         }
         this.queryString = {};
     }
@@ -83,24 +85,31 @@ export default class App extends React.Component {
             console.log(error);
         }
     }
-
+    toggleFilter = () =>{
+        
+          // const curr = this.state.isFilterActive;
+         //  this.setState({
+         //     isFilterActive: !curr
+        //     })
+      //  console.log('toggle')
+      
+    }
     getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
-            console.log('Permission to access location was denied')
-          this.setState({
-            errorMessage: 'Permission to access location was denied',
-          });
+            this.setState({
+                errorMessage: 'Permission to access location was denied',
+            });
         }
-    
+
         let location = await Location.getCurrentPositionAsync({});
         this.setState({
             lat: location.coords.latitude,
             lng: location.coords.longitude
-        }, ()=>{
+        }, () => {
             this.updateSchoolList();
         })
-      };
+    };
 
     // store the new shortlist to local storage.
     storeData = async (shortlist) => {
@@ -146,7 +155,7 @@ export default class App extends React.Component {
         }
         this.setState({
             filters: filterArr
-        },() => {
+        }, () => {
             console.log(this.state.filters.preschool)
         })
 
@@ -186,7 +195,7 @@ export default class App extends React.Component {
                 formBody += gradeQuery
             }
         }
-        
+
         for (const key of Object.keys(this.queryString)) {
             formBody += this.queryString[key];
         }
@@ -206,22 +215,22 @@ export default class App extends React.Component {
                 this.setState({
                     schoolData: data
                 });
-            }).catch(function(error) {
+            }).catch(function (error) {
                 console.log('There has been a problem with your fetch operation: ' + error.message);
-                 // ADD THIS THROW error
-                  throw error;
-                });
+                // ADD THIS THROW error
+                throw error;
+            });
 
     }
     // After the component mounted, try to retrieve shortlist from local storage.
     componentDidMount() {
         if (Platform.OS === 'android' && !Constants.isDevice) {
             this.setState({
-              errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+                errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
             });
-          } else {
+        } else {
             this.getLocationAsync();
-          }
+        }
 
         fetch(`https://ourkids.net/school/adv-search/json_adv_search_output.php`, {
             method: 'post',
@@ -241,15 +250,41 @@ export default class App extends React.Component {
         this.retrieveShortlist();
     }
     render() {
+        const screenHeight = Dimensions.get('window').height-25;
+        const draggableRange = {top: screenHeight, bottom: 0}
+        const animatedValue = new Animated.Value(draggableRange.bottom) // Initial position is at bottom.
+
+        animatedValue.addListener(({ value }) => {
+            
+        if (value === draggableRange.top) {
+          
+            // At top position
+            this.setState({
+                isFilterActive:true
+            });
+        } 
+
+        if (value === draggableRange.bottom) {
+          
+            // At bottom position
+            this.setState({
+                isFilterActive:false
+            });
+        }
+        })
         return (
             <FilterContext.Provider value={
                 {
                     schoolData: this.state.schoolData,
                     shortlist: this.state.shortlist,
                     filters: this.state.filters,
+                    isFilterActive: this.state.isFilterActive,
+                    draggableRange:draggableRange,
+                    animatedValue: animatedValue,
                     actions: {
                         addToShortlist: this.addToShortlist,
-                        handleFilters: this.handleFilters
+                        handleFilters: this.handleFilters,
+                        toggleFilter: this.toggleFilter
                     }
                 }}>
                 <AppContainer />
@@ -264,10 +299,7 @@ class LogoTitle extends React.Component {
         return (
             <Image
                 source={require('./assets/img/ourkids-red-logo.png')}
-                style={{
-                    width: 135, height: 30, marginRight: 'auto',
-                    marginLeft: 'auto'
-                }}
+               
             />
         );
     }
@@ -289,6 +321,7 @@ class HomeScreen extends React.Component {
     }
 
     render() {
+      
         return (
             <FilterContext.Consumer>
                 {context => (
@@ -297,7 +330,11 @@ class HomeScreen extends React.Component {
                             schoolData={context.schoolData}
                             addToShortlist={context.actions.addToShortlist}
                             shortlist={context.shortlist}></SchoolList>
-                        <Footer navigation={this.props.navigation} />
+                        <SlidingUpPanel  allowDragging ={false} ref={c => this._panel = c}  animatedValue={context.animatedValue}
+  draggableRange={context.draggableRange}  >
+                            <Filter hideFilters={() =>  this._panel.hide()}/>
+                        </SlidingUpPanel>
+                        {!context.isFilterActive && <Footer isFilterActive={context.isFilterActive} navigation={this.props.navigation} toggleFilter={context.actions.toggleFilter} showFilters={() => this._panel.show()} />}
                     </View>
                 )
                 }
@@ -357,7 +394,7 @@ const AppNavigator = createStackNavigator(
         Home: HomeScreen,
         Details: ProfileNavigator,
         Map: schoolMap,
-        Filter: Filter
+        // Filter: Filter
     },
     {
         initialRouteName: "Home"

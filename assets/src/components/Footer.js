@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
-//import { FontAwesome } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
+import { StyleSheet, Text, View, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 const styles = StyleSheet.create({
     footer:{
         position:'absolute',
@@ -41,6 +40,7 @@ const styles = StyleSheet.create({
 });
 export default class Footer extends React.Component{
     render(){
+      
         return(
         <View style={styles.footer}>
             <View style={styles.footerButtons}>
@@ -49,19 +49,23 @@ export default class Footer extends React.Component{
                     }}>
                     <View style={styles.left} >
                         <Text style={{fontSize:16}}>
-                        <FontAwesome name="map" style={{fontSize:18}} />  Map
+                            <Icon name="map" style={{fontSize:18}} />  Map
                             </Text>
                     </View>
                 </TouchableWithoutFeedback>
+                <TouchableOpacity onPress={()=>{ this.props.toggleFilter();}}>
                 <TouchableWithoutFeedback onPress={()=>{
-                    this.props.navigation.navigate('Filter')
+                    //this.props.navigation.navigate('Filter')
+                   
+                    this.props.showFilters()
                 }}>
                     <View style={styles.right}>
                         <Text style={{fontSize:18}}>
-                        <FontAwesome name="filter" style={{fontSize:18}}/> Filter
+                        <Icon name="filter" style={{fontSize:18}}/> Filter
                     </Text>
                 </View>
                 </TouchableWithoutFeedback>
+                </TouchableOpacity>
             </View>
         </View>);
     }

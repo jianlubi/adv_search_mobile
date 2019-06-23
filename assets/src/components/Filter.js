@@ -11,7 +11,7 @@ import { FilterContext } from './FilterContext';
 const styles = StyleSheet.create({
 	filters: {
 		paddingLeft: 15,
-		paddingRight: 15
+		paddingRight: 15,
 	},
 	footer:{
 		position: 'absolute',
@@ -40,7 +40,7 @@ export default class Filter extends Component {
 		return (
 			<FilterContext.Consumer>
             {context => (
-			<View style={{flex: 1}}>
+			<View style={{flex: 1, backgroundColor:'white'}}>
 			<ScrollView style={styles.filters}>
 				<Grades filterData={filterData.grade} />
 				<Types filterData={[filterData.enrollments, filterData.genders]} />
@@ -61,7 +61,7 @@ export default class Filter extends Component {
 				<UniversityPlacement />
 				
 			</ScrollView>
-			<TouchableOpacity style={styles.footer}><View style={styles.btn}><Text style={styles.btnText}>See {context.schoolData.length} schools</Text></View></TouchableOpacity>
+			<TouchableOpacity style={styles.footer} onPress={this.props.hideFilters}><View style={styles.btn}><Text style={styles.btnText}>See {context.schoolData.length} schools</Text></View></TouchableOpacity>
 			</View>
 			)}
 			</FilterContext.Consumer>

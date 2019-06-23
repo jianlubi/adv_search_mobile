@@ -3,10 +3,7 @@ import School from './School';
 import { StyleSheet, View, Text, FlatList, List  } from 'react-native';
 import LottieView from 'lottie-react-native';
 const styles = StyleSheet.create({
-    schoolList:{
-        width:'100%',
-       flex:1
-    }
+
 });
 export default class SchoolList extends React.Component{
 
@@ -24,7 +21,7 @@ export default class SchoolList extends React.Component{
                     userReviews="1" minTuition={item.cost_from} maxTuition={item.cost_to} currency="USD" featured={(item.weight === "3") ? 1 : 0}
                     showMiniProfile={this.props.showMiniProfile} addToShortlist={this.props.addToShortlist} shortlist={this.props.shortlist}></School>
                   )  }
-                style={styles.schoolList} />) 
+                 />) 
         }
      
        
