@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@ptomasroos/react-native-multi-slider": "^1.0.0",
-    "expo": "^33.0.0",
+    "expo": "^46.0.14",
     "expo-constants": "^5.0.1",
     "lottie-react-native": "^2.5.11",
     "react": "16.8.3",
